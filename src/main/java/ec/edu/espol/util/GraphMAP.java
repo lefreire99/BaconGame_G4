@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Queue;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  *
@@ -21,7 +22,7 @@ public class GraphMAP<E>{
     public Map<E,Vertex<E>> vertexes;
     
     public GraphMAP(){
-        vertexes = new HashMap<>();
+        vertexes = new ConcurrentHashMap<>();
     }
     
     public boolean addVertex(E data){

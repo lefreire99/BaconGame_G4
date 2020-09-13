@@ -7,6 +7,7 @@ package ec.edu.espol.util;
 
 import java.util.LinkedList;
 import java.util.Objects;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
  *
@@ -14,14 +15,14 @@ import java.util.Objects;
  */
 public class Vertex <E>{
     private E data;
-    private LinkedList<Edge<E>> edges;
+    private ConcurrentLinkedQueue<Edge<E>> edges;
     private boolean visited;
     private int distancia;
     private Vertex<E> antecesor;
 
     public Vertex(E data) {
         this.data = data;
-        edges = new LinkedList<>();
+        edges = new ConcurrentLinkedQueue<>();
         distancia=Integer.MAX_VALUE;
     }
 
@@ -57,13 +58,11 @@ public class Vertex <E>{
         this.data = data;
     }
 
-    public LinkedList<Edge<E>> getEdges() {
+    public ConcurrentLinkedQueue<Edge<E>> getEdges() {
         return edges;
     }
 
-    public void setEdges(LinkedList<Edge<E>> edges) {
-        this.edges = edges;
-    }
+    
 
     @Override
     public int hashCode() {
