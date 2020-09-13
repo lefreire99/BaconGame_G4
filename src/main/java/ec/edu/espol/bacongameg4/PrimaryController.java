@@ -13,7 +13,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 
-public class PrimaryController implements Initializable {
+public class PrimaryController {
     
     @FXML
     private VBox rightBox;
@@ -32,23 +32,22 @@ public class PrimaryController implements Initializable {
     
     @FXML
     private TextField txtActor2;
-
-    @Override
-    public void initialize(URL arg0, ResourceBundle arg1) {
-        //Util.leerArchivo();
-    }
     
     @FXML
     private void buscar() throws IOException {
         System.out.println(Util.grafo.vertexes.size());
-        if(txtActor1.getText()==null || txtActor2.getText()==null){
+        if(txtActor1.getText().isEmpty()|| txtActor2.getText().isEmpty()){
             DialogMessage.nullAlert();
         }else{
             if(!rightBox.getChildren().isEmpty())
                 rightBox.getChildren().removeAll();
-            dijkstra();
-            bfs();
-            //dfs();
+            if(Util.grafo.hasActor(txtActor1.getText()) && Util.grafo.hasActor(txtActor2.getText())){
+                dijkstra();
+                bfs();
+                //dfs();
+            }else{
+                DialogMessage.nullAlert();
+            }
         }
     }
     

@@ -130,13 +130,8 @@ public class GraphMAP<E>{
         }    
     }
     
-    public int menorDistancia(E inicio, E fin){
-        if(inicio== null || fin==null) return -1;
-        if(inicio.equals(fin)) return 0;
-        dijkstra(inicio);
-        int distancia=vertexes.get(fin).getDistancia();
-        cleanVertexes();
-        return distancia;
+    public boolean hasActor(E data){
+        return vertexes.get(data)!=null;
     }
 
     public Deque<Edge<E>> caminoMinimo(E inicio, E fin){
