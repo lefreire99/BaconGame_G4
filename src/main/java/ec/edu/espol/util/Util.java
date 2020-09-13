@@ -10,10 +10,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.lang.System.Logger;
-import java.lang.System.Logger.Level;
 import java.util.LinkedList;
-import java.util.List;
+import org.json.*;
 
 /**
  *
@@ -26,16 +24,20 @@ public class Util {
         try(FileReader fr = new FileReader(new File("src/archivos/data.txt"));
                 BufferedReader br = new BufferedReader(fr)){
             String line;
+            int i = 0;
             while((line=br.readLine())!=null){
                 //Hay registros con : en el titulo, revisar
-                String[] datos=line.split(":");
-                String pelicula=datos[1].split(",")[0];
-                //La palabra "directors" aun se encuentra en el arreglo actores
-                //nombres con este formato revisar "Brad Johnson (television actor)|Brad Johnson"
-                String[] actores=datos[2].replaceAll("\\[", "").replaceAll("\\]", "").split(",");
-                if(actores.length!=1){
-                    ponerVertices(grafo,actores);
-                    ponerEdges(grafo,actores,pelicula);
+                JSONObject obj = new JSONObject(line);
+                String pelicula = obj.getString("title");
+                JSONArray actores = obj.getJSONArray("cast");
+                LinkedList parsedActores = parseJSONArray(actores);
+                if(!actores.isEmpty()){
+                    ponerVertices(grafo,parsedActores);
+                    ponerEdges(grafo,parsedActores,pelicula);
+                    i++;
+                }
+                if (i%1000 == 0){
+                    System.out.println(i);
                 }
             }
             return grafo;
@@ -46,33 +48,26 @@ public class Util {
         }
         return null;
     }
-    
-    public static void ponerVertices(GraphMAP<String> grafo, String[] datos){
-        for(String s: datos){
-            grafo.addVertex(s);
+    private static LinkedList<String> parseJSONArray(JSONArray actores){
+        LinkedList<String> parsed = new LinkedList<>();
+        for (Object s: actores){
+            String p = (String) s;
+            parsed.add(p.replaceAll(".*\\||\\[|\\]", ""));
+        }
+        return parsed;
+    }
+    public static void ponerVertices(GraphMAP<String> grafo, LinkedList datos){
+        for(Object s: datos){
+            String se = (String) s;
+            grafo.addVertex((String) se.replaceAll("[\\.*$|\\[\\]]", ""));
         }
     }
     
-    public static void ponerEdges(GraphMAP<String> grafo, String[] datos,String pelicula){
-        int salteador = 1;
-        for(int j = 0; j<datos.length-2; j++){
-            for(int i = salteador; i<datos.length; i++){
-                grafo.addEdge(datos[j], datos[i], pelicula, 1);
+    public static void ponerEdges(GraphMAP<String> grafo, LinkedList datos,String pelicula){
+        for(Object origen: datos){
+            for(Object destino: datos){
+                grafo.addEdge((String) origen, (String) destino,pelicula, 1);
             }
-            salteador++;
         }
-        
-        /*for(String origen: datos){
-            for(String destino: datos){
-                grafo.addEdge(origen, destino, 1);
-            }
-        }*/
     }
-    
-    /*public static void agregarLista(List<String> lista, String[] datos){
-        for(int i=0;i<datos.length-1;i++){
-            lista.add(datos[i]);
-        }
-    }*/
-    
 }
