@@ -34,8 +34,9 @@ public class Util {
                 if(!actores.isEmpty()){
                     ponerVertices(grafo,parsedActores);
                     ponerEdges(grafo,parsedActores,pelicula);
-                    i++;
+                    
                 }
+                i++;
                 if (i%1000 == 0){
                     System.out.println(i);
                 }
