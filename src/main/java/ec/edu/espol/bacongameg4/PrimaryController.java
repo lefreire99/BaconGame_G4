@@ -2,6 +2,8 @@ package ec.edu.espol.bacongameg4;
 
 import ec.edu.espol.util.Edge;
 import ec.edu.espol.util.DialogMessage;
+import ec.edu.espol.util.StackActor;
+import ec.edu.espol.util.StackMovie;
 import ec.edu.espol.util.Util;
 import java.io.IOException;
 import java.net.URL;
@@ -9,14 +11,17 @@ import java.util.Deque;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 
 public class PrimaryController {
     
     @FXML
-    private VBox rightBox;
+    private ScrollPane scrollPane;
     
     @FXML
     private VBox bfsBox;
@@ -39,12 +44,12 @@ public class PrimaryController {
         if(txtActor1.getText().isEmpty()|| txtActor2.getText().isEmpty()){
             DialogMessage.nullAlert();
         }else{
-            if(!rightBox.getChildren().isEmpty())
-                rightBox.getChildren().removeAll();
+            if(scrollPane.getContent()!=null)
+                scrollPane.setContent(null);//.getChildren().removeAll();
             if(Util.grafo.hasActor(txtActor1.getText()) && Util.grafo.hasActor(txtActor2.getText())){
                 dijkstra();
                 bfs();
-                //dfs();
+                dfs();
             }else{
                 DialogMessage.errorAlert();
             }
@@ -59,13 +64,23 @@ public class PrimaryController {
             Util.grafo.dijkstra(txtActor1.getText());
             Deque<Edge<String>> rutaDijkstra = Util.grafo.caminoMinimo(txtActor1.getText(), txtActor2.getText());
             Label numActores1=new Label("Cantidad: "+rutaDijkstra.size());
+            VBox diagrama = new VBox();
+            diagrama.setAlignment(Pos.TOP_CENTER);
+            diagrama.setPrefWidth(400);
+            diagrama.setPrefHeight(300);
             while(!rutaDijkstra.isEmpty()){
                 Edge<String> arco = rutaDijkstra.pop();
+                diagrama.getChildren().addAll(new StackActor(arco.getVDestino().getData()),new StackMovie(arco.getPelicula()));
                 System.out.println(arco.getVDestino());
                 System.out.println(arco.getPelicula()); //Se podria invertir el arco
                 System.out.println(arco.getVOrigen());
                 System.out.println("-------------------");
             }
+            dijkstraBox.setOnMouseClicked((ev)->{
+                if(scrollPane.getContent()!=null)
+                    scrollPane.setContent(null);
+                scrollPane.setContent(diagrama);
+            });
             Long timeEnd1=System.currentTimeMillis();
             Long timeFinal1=timeEnd1-timeStart1;
             Label time1=new Label("Tiempo: "+timeFinal1);
@@ -80,13 +95,23 @@ public class PrimaryController {
             Util.grafo.bfs(txtActor1.getText());
             Deque<Edge<String>> rutaBfs = Util.grafo.caminoMinimo(txtActor1.getText(), txtActor2.getText());
             Label numActores2=new Label("Cantidad: "+rutaBfs.size());
+            VBox diagrama = new VBox();
+            diagrama.setAlignment(Pos.TOP_CENTER);
+            diagrama.setPrefWidth(400);
+            diagrama.setPrefHeight(300);
             while(!rutaBfs.isEmpty()){
                 Edge<String> arco = rutaBfs.pop();
+                diagrama.getChildren().addAll(new StackActor(arco.getVDestino().getData()),new StackMovie(arco.getPelicula()));
                 System.out.println(arco.getVDestino());
                 System.out.println(arco.getPelicula()); //Se podria invertir el arco
                 System.out.println(arco.getVOrigen());
                 System.out.println("-------------------");
             }
+            bfsBox.setOnMouseClicked((ev)->{
+                if(scrollPane.getContent()!=null)
+                    scrollPane.setContent(null);
+                scrollPane.setContent(diagrama);
+            });
             Long timeEnd2=System.currentTimeMillis();
             Long timeFinal2=timeEnd2-timeStart2;
             Label time2=new Label("Tiempo: "+timeFinal2);
@@ -101,13 +126,23 @@ public class PrimaryController {
             Util.grafo.dfs(txtActor1.getText());
             Deque<Edge<String>> rutaDfs = Util.grafo.caminoMinimo(txtActor1.getText(), txtActor2.getText());
             Label numActores3=new Label("Cantidad: "+rutaDfs.size());
+            VBox diagrama = new VBox();
+            diagrama.setAlignment(Pos.TOP_CENTER);
+            diagrama.setPrefWidth(400);
+            diagrama.setPrefHeight(300);
             while(!rutaDfs.isEmpty()){
                 Edge<String> arco = rutaDfs.pop();
+                diagrama.getChildren().addAll(new StackActor(arco.getVDestino().getData()),new StackMovie(arco.getPelicula()));
                 System.out.println(arco.getVDestino());
                 System.out.println(arco.getPelicula()); //Se podria invertir el arco
                 System.out.println(arco.getVOrigen());
                 System.out.println("-------------------");
             }
+            dfsBox.setOnMouseClicked((ev)->{
+                if(scrollPane.getContent()!=null)
+                    scrollPane.setContent(null);
+                scrollPane.setContent(diagrama);
+            });
             Long timeEnd3=System.currentTimeMillis();
             Long timeFinal3=timeEnd3-timeStart3;
             Label time3=new Label("Tiempo: "+timeFinal3);
