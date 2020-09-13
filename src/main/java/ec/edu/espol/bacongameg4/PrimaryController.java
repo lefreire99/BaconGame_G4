@@ -38,10 +38,21 @@ public class PrimaryController implements Initializable {
     @FXML
     private void buscar() throws IOException {
         System.out.println(Util.grafo.vertexes.size());
+        
         Util.grafo.dijkstra(txtActor1.getText());
         Deque<String> ruta = Util.grafo.caminoMinimo(txtActor1.getText(), txtActor2.getText());
         while(!ruta.isEmpty())
             System.out.println(ruta.pop());
+        
+        /*Util.grafo.bfs(txtActor1.getText());
+        ruta = Util.grafo.caminoMinimo(txtActor1.getText(), txtActor2.getText());
+        while(!ruta.isEmpty())
+            System.out.println(ruta.pop());
+        
+        Util.grafo.dfs(txtActor1.getText());
+        ruta = Util.grafo.caminoMinimo(txtActor1.getText(), txtActor2.getText());
+        while(!ruta.isEmpty())
+            System.out.println(ruta.pop());*/
     }
     
 }
