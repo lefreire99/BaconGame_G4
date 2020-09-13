@@ -46,7 +46,7 @@ public class PrimaryController {
                 bfs();
                 //dfs();
             }else{
-                DialogMessage.nullAlert();
+                DialogMessage.errorAlert();
             }
         }
     }
