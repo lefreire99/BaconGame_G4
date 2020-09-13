@@ -37,7 +37,6 @@ public class Util {
                     ponerVertices(grafo,actores);
                     ponerEdges(grafo,actores,pelicula);
                 }
-                System.out.println(actores[0]);
             }
             return grafo;
         } catch (FileNotFoundException ex) {
@@ -56,7 +55,7 @@ public class Util {
     
     public static void ponerEdges(GraphMAP<String> grafo, String[] datos,String pelicula){
         int salteador = 1;
-        for(int j = 0; j<datos.length-1; j++){
+        for(int j = 0; j<datos.length-2; j++){
             for(int i = salteador; i<datos.length; i++){
                 grafo.addEdge(datos[j], datos[i], pelicula, 1);
             }
