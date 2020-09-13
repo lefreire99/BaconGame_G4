@@ -45,7 +45,7 @@ public class PrimaryController {
             DialogMessage.nullAlert();
         }else{
             if(scrollPane.getContent()!=null)
-                scrollPane.setContent(null);//.getChildren().removeAll();
+                scrollPane.setContent(null);
             if(Util.grafo.hasActor(txtActor1.getText()) && Util.grafo.hasActor(txtActor2.getText())){
                 dijkstra();
                 bfs();
@@ -64,10 +64,7 @@ public class PrimaryController {
             Util.grafo.dijkstra(txtActor1.getText());
             Deque<Edge<String>> rutaDijkstra = Util.grafo.caminoMinimo(txtActor1.getText(), txtActor2.getText());
             Label numActores1=new Label("Cantidad: "+rutaDijkstra.size());
-            VBox diagrama = new VBox();
-            diagrama.setAlignment(Pos.TOP_CENTER);
-            diagrama.setPrefWidth(400);
-            diagrama.setPrefHeight(300);
+            VBox diagrama = createVBox();
             while(!rutaDijkstra.isEmpty()){
                 Edge<String> arco = rutaDijkstra.pop();
                 diagrama.getChildren().addAll(new StackActor(arco.getVDestino().getData()),new StackMovie(arco.getPelicula()));
@@ -77,9 +74,7 @@ public class PrimaryController {
                 System.out.println("-------------------");
             }
             dijkstraBox.setOnMouseClicked((ev)->{
-                if(scrollPane.getContent()!=null)
-                    scrollPane.setContent(null);
-                scrollPane.setContent(diagrama);
+                refreshScrollPane(diagrama);
             });
             Long timeEnd1=System.currentTimeMillis();
             Long timeFinal1=timeEnd1-timeStart1;
@@ -95,10 +90,7 @@ public class PrimaryController {
             Util.grafo.bfs(txtActor1.getText());
             Deque<Edge<String>> rutaBfs = Util.grafo.caminoMinimo(txtActor1.getText(), txtActor2.getText());
             Label numActores2=new Label("Cantidad: "+rutaBfs.size());
-            VBox diagrama = new VBox();
-            diagrama.setAlignment(Pos.TOP_CENTER);
-            diagrama.setPrefWidth(400);
-            diagrama.setPrefHeight(300);
+            VBox diagrama = createVBox();
             while(!rutaBfs.isEmpty()){
                 Edge<String> arco = rutaBfs.pop();
                 diagrama.getChildren().addAll(new StackActor(arco.getVDestino().getData()),new StackMovie(arco.getPelicula()));
@@ -108,9 +100,7 @@ public class PrimaryController {
                 System.out.println("-------------------");
             }
             bfsBox.setOnMouseClicked((ev)->{
-                if(scrollPane.getContent()!=null)
-                    scrollPane.setContent(null);
-                scrollPane.setContent(diagrama);
+                refreshScrollPane(diagrama);
             });
             Long timeEnd2=System.currentTimeMillis();
             Long timeFinal2=timeEnd2-timeStart2;
@@ -126,10 +116,7 @@ public class PrimaryController {
             Util.grafo.dfs(txtActor1.getText());
             Deque<Edge<String>> rutaDfs = Util.grafo.caminoMinimo(txtActor1.getText(), txtActor2.getText());
             Label numActores3=new Label("Cantidad: "+rutaDfs.size());
-            VBox diagrama = new VBox();
-            diagrama.setAlignment(Pos.TOP_CENTER);
-            diagrama.setPrefWidth(400);
-            diagrama.setPrefHeight(300);
+            VBox diagrama = createVBox();
             while(!rutaDfs.isEmpty()){
                 Edge<String> arco = rutaDfs.pop();
                 diagrama.getChildren().addAll(new StackActor(arco.getVDestino().getData()),new StackMovie(arco.getPelicula()));
@@ -139,14 +126,26 @@ public class PrimaryController {
                 System.out.println("-------------------");
             }
             dfsBox.setOnMouseClicked((ev)->{
-                if(scrollPane.getContent()!=null)
-                    scrollPane.setContent(null);
-                scrollPane.setContent(diagrama);
+                refreshScrollPane(diagrama);
             });
             Long timeEnd3=System.currentTimeMillis();
             Long timeFinal3=timeEnd3-timeStart3;
             Label time3=new Label("Tiempo: "+timeFinal3);
             dfsBox.getChildren().addAll(numActores3,time3);
+    }
+    
+    private VBox createVBox(){
+        VBox diagrama = new VBox();
+        diagrama.setAlignment(Pos.TOP_CENTER);
+        diagrama.setPrefWidth(400);
+        diagrama.setPrefHeight(300);
+        return diagrama;
+    }
+    
+    private void refreshScrollPane(VBox diagrama){
+        if(scrollPane.getContent()!=null)
+            scrollPane.setContent(null);
+        scrollPane.setContent(diagrama);
     }
     
 }
