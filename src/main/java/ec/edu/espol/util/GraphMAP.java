@@ -55,9 +55,9 @@ public class GraphMAP<E>{
     
     public void bfs(E data){
         if(data!=null){
-            Vertex<E> v=vertexes.get(data);
+            Vertex<E> v = vertexes.get(data);
             if(v!=null){
-                Queue<Vertex<E>> cola=new LinkedList<>();
+                Queue<Vertex<E>> cola = new LinkedList<>();
                 v.setVisited(true);
                 cola.offer(v);
                 while(!cola.isEmpty()){
@@ -109,7 +109,7 @@ public class GraphMAP<E>{
         return vertexes+"\n"+sbe.toString();
     }
     
-    private void dijkstra(E inicio){
+    public void dijkstra(E inicio){
         Vertex<E> v=vertexes.get(inicio);
         PriorityQueue<Vertex<E>> cola=new PriorityQueue<>((Vertex<E> v1,Vertex<E> v2)->v1.getDistancia()-v2.getDistancia());
         v.setDistancia(0);
@@ -120,9 +120,9 @@ public class GraphMAP<E>{
             for(Edge<E> e:v.getEdges()){
                 if(!e.getVDestino().isVisited()){
                     if(v.getDistancia()+e.getPeso()<e.getVDestino().getDistancia()){
-                    e.getVDestino().setDistancia(e.getPeso()+v.getDistancia());
-                    e.getVDestino().setAntecesor(v);
-                    cola.offer(e.getVDestino());
+                        e.getVDestino().setDistancia(e.getPeso()+v.getDistancia());
+                        e.getVDestino().setAntecesor(v);
+                        cola.offer(e.getVDestino());
                     }
                 }
             }
@@ -138,13 +138,19 @@ public class GraphMAP<E>{
         return distancia;
     }
 
-    public List<E> caminoMinimo(E inicio, E fin){
+    public Deque<E> caminoMinimo(E inicio, E fin){
         if(inicio== null || fin==null) return null;
         if(inicio.equals(fin)) return null;
-        List<E> camino=new LinkedList<>();
-        dijkstra(inicio);
-        Vertex<E> v=vertexes.get(fin);
-        Deque<Vertex<E>> cola=new LinkedList<>();
+        //List<E> camino = new LinkedList<>();
+        //dijkstra(inicio);
+        Vertex<E> v = vertexes.get(fin);
+        Deque<E> pila = new LinkedList<>();
+        pila.push(v.getData());
+        while(v.getAntecesor()!=null){
+            v = v.getAntecesor();
+            pila.push(v.getData());
+        }
+        /*Deque<Vertex<E>> cola=new LinkedList<>();
         cola.offer(v);
         while(!cola.isEmpty()){
             v=cola.poll();
@@ -152,9 +158,9 @@ public class GraphMAP<E>{
                 camino.add(v.getAntecesor().getData());
                 cola.offer(v.getAntecesor());
             }
-        }
+        }*/
         cleanVertexes();
-        return camino;
+        return pila;
     }
     
     private void cleanVertexes(){

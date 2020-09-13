@@ -3,6 +3,7 @@ package ec.edu.espol.bacongameg4;
 import ec.edu.espol.util.Util;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Deque;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -31,12 +32,16 @@ public class PrimaryController implements Initializable {
 
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
-        Util.leerArchivo();
+        //Util.leerArchivo();
     }
     
     @FXML
     private void buscar() throws IOException {
         System.out.println(Util.grafo.vertexes.size());
+        Util.grafo.dijkstra(txtActor1.getText());
+        Deque<String> ruta = Util.grafo.caminoMinimo(txtActor1.getText(), txtActor2.getText());
+        while(!ruta.isEmpty())
+            System.out.println(ruta.pop());
     }
     
 }
