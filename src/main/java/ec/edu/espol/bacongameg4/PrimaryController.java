@@ -134,11 +134,21 @@ public class PrimaryController {
             dfsBox.getChildren().addAll(numActores3,time3);
     }
     
-    private VBox createVBox(){
+    private VBox createVBox(Deque<Edge<String>> ruta){
         VBox diagrama = new VBox();
         diagrama.setAlignment(Pos.TOP_CENTER);
         diagrama.setPrefWidth(400);
         diagrama.setPrefHeight(300);
+        while(ruta.size()>1){
+            Edge<String> arco = ruta.pop();
+            diagrama.getChildren().addAll(
+                    new StackActor(arco.getVDestino().getData()),new StackMovie(arco.getPelicula()));
+            /*System.out.println(arco.getVDestino());
+            System.out.println(arco.getPelicula()); //Se podria invertir el arco
+            System.out.println(arco.getVOrigen());
+            System.out.println("-------------------");*/
+        }
+        diagrama.getChildren().add(new StackActor(ruta.pop().getVDestino().getData()));
         return diagrama;
     }
     
