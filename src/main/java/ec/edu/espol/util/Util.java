@@ -28,7 +28,7 @@ public class Util {
     static ExecutorService ex = Executors.newSingleThreadExecutor();
 
     public static void leerArchivo(){
-         grafo = new GraphMAP(false);
+         grafo = new GraphMAP();
         try(FileReader fr = new FileReader(new File("src/archivos/data.txt"));
                 BufferedReader br = new BufferedReader(fr)){
 

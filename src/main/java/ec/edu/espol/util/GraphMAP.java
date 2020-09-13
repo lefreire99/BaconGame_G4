@@ -5,17 +5,13 @@
  */
 package ec.edu.espol.util;
 
-import java.util.ArrayList;
 import java.util.Deque;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Queue;
-import java.util.Set;
 
 /**
  *
@@ -23,10 +19,8 @@ import java.util.Set;
  */
 public class GraphMAP<E>{
     public Map<E,Vertex<E>> vertexes;
-    private boolean directed;
     
-    public GraphMAP(boolean directed){
-        this.directed = directed;
+    public GraphMAP(){
         vertexes = new HashMap<>();
     }
     
@@ -40,31 +34,14 @@ public class GraphMAP<E>{
         }
     }
     
-    /*public boolean removeVertex(E data){
-        if(data == null || vertexes.isEmpty()) return false;
-        ListIterator<Vertex<E>> iv = vertexes.listIterator();
-        while(iv.hasNext()){
-            Vertex<E> v = iv.next();
-            ListIterator<Edge<E>> ie = v.getEdges().listIterator();
-            while(ie.hasNext()){
-                Edge<E> e = ie.next();
-                if(e.getVDestino().getData().equals(data))
-                    ie.remove();
-            }
-        }
-        Vertex<E> vi = new Vertex<>(data);
-        return vertexes.remove(vi);
-    }*/
-    
     public boolean addEdge(E src, E dst, String pelicula,int peso){
         if(src == null || dst == null) return false;
         Vertex<E> vs = vertexes.get(src);
         Vertex<E> vd = vertexes.get(dst);
         if(vs == null || vd == null) return false;
         Edge<E> e = new Edge<>(peso,vs,vd,pelicula);
-        if(!vs.getEdges().contains(e))
+        if(!vs.getEdges().contains(e)){
             vs.getEdges().add(e);
-        if(!directed){
             Edge<E> ei = new Edge<>(peso,vd,vs,pelicula);
             if(!vd.getEdges().contains(ei))
                 vd.getEdges().add(ei);
@@ -72,26 +49,11 @@ public class GraphMAP<E>{
         return true;
     }
     
-    /*public boolean removeEdge(E src, E dst){
-        if(src == null || dst == null) return false;
-        Vertex<E> vs = searchVertex(src);
-        Vertex<E> vd = searchVertex(dst);
-        if(vs == null || vd == null) return false;
-        Edge<E> e = new Edge<>(0,vs,vd);
-        vs.getEdges().remove(e);
-        if(!directed){
-            e = new Edge<>(0,vd,vs);
-            vd.getEdges().remove(e);
-        }
-        return true;
-    }*/
-    
     private Vertex<E> searchVertex(E data){
         return vertexes.get(data);
     }
     
     public void bfs(E data){
-        //List<E> result=new LinkedList<>();
         if(data!=null){
             Vertex<E> v=vertexes.get(data);
             if(v!=null){
@@ -100,7 +62,6 @@ public class GraphMAP<E>{
                 cola.offer(v);
                 while(!cola.isEmpty()){
                     v=cola.poll();
-                    //result.add(v.getData());
                     for(Edge<E> e:v.getEdges()){
                         if(!e.getVDestino().isVisited()){
                             e.getVDestino().setVisited(true);
@@ -110,13 +71,10 @@ public class GraphMAP<E>{
                     }
                 }
             }
-        //cleanVertexes();
-        //return result;
         }
     }
     
     public void dfs(E data){
-        //List<E> result=new LinkedList<>();
         if(data!=null){
             Vertex<E> v=vertexes.get(data);
             if(v!=null){
@@ -125,7 +83,6 @@ public class GraphMAP<E>{
                 pila.push(v);
                 while(!pila.isEmpty()){
                     v=pila.pop();
-                    //result.add(v.getData());
                     for(Edge<E> e:v.getEdges()){
                         if(!e.getVDestino().isVisited()){
                             e.getVDestino().setVisited(true);
@@ -135,8 +92,6 @@ public class GraphMAP<E>{
                     }
                 }
             }
-            //cleanVertexes();
-            //return result;
         }
     }
 
