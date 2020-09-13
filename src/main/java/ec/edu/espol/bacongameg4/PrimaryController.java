@@ -5,6 +5,7 @@ import ec.edu.espol.util.DialogMessage;
 import ec.edu.espol.util.StackActor;
 import ec.edu.espol.util.StackMovie;
 import ec.edu.espol.util.Util;
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Deque;
@@ -16,6 +17,8 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 
 public class PrimaryController {
@@ -67,12 +70,13 @@ public class PrimaryController {
             VBox diagrama = createVBox();
             while(!rutaDijkstra.isEmpty()){
                 Edge<String> arco = rutaDijkstra.pop();
-                diagrama.getChildren().addAll(new StackActor(arco.getVDestino().getData()),new StackMovie(arco.getPelicula()));
+                diagrama.getChildren().addAll(new StackActor(arco.getVDestino().getData()),mostrarImagen(),new StackMovie(arco.getPelicula()),mostrarImagen());
                 System.out.println(arco.getVDestino());
                 System.out.println(arco.getPelicula()); //Se podria invertir el arco
                 System.out.println(arco.getVOrigen());
                 System.out.println("-------------------");
             }
+            diagrama.getChildren().remove(diagrama.getChildren().size()-1);
             dijkstraBox.setOnMouseClicked((ev)->{
                 refreshScrollPane(diagrama);
             });
@@ -93,12 +97,13 @@ public class PrimaryController {
             VBox diagrama = createVBox();
             while(!rutaBfs.isEmpty()){
                 Edge<String> arco = rutaBfs.pop();
-                diagrama.getChildren().addAll(new StackActor(arco.getVDestino().getData()),new StackMovie(arco.getPelicula()));
+                diagrama.getChildren().addAll(new StackActor(arco.getVDestino().getData()),mostrarImagen(),new StackMovie(arco.getPelicula()),mostrarImagen());
                 System.out.println(arco.getVDestino());
                 System.out.println(arco.getPelicula()); //Se podria invertir el arco
                 System.out.println(arco.getVOrigen());
                 System.out.println("-------------------");
             }
+            diagrama.getChildren().remove(diagrama.getChildren().size()-1);
             bfsBox.setOnMouseClicked((ev)->{
                 refreshScrollPane(diagrama);
             });
@@ -119,12 +124,13 @@ public class PrimaryController {
             VBox diagrama = createVBox();
             while(!rutaDfs.isEmpty()){
                 Edge<String> arco = rutaDfs.pop();
-                diagrama.getChildren().addAll(new StackActor(arco.getVDestino().getData()),new StackMovie(arco.getPelicula()));
+                diagrama.getChildren().addAll(new StackActor(arco.getVDestino().getData()),mostrarImagen(),new StackMovie(arco.getPelicula()),mostrarImagen());
                 System.out.println(arco.getVDestino());
                 System.out.println(arco.getPelicula()); //Se podria invertir el arco
                 System.out.println(arco.getVOrigen());
                 System.out.println("-------------------");
             }
+            diagrama.getChildren().remove(diagrama.getChildren().size()-1);
             dfsBox.setOnMouseClicked((ev)->{
                 refreshScrollPane(diagrama);
             });
@@ -156,6 +162,14 @@ public class PrimaryController {
         if(scrollPane.getContent()!=null)
             scrollPane.setContent(null);
         scrollPane.setContent(diagrama);
+    }
+    
+    private ImageView mostrarImagen(){
+        File file = new File("src/archivos/arrow.png");
+        Image image = new Image(file.toURI().toString());
+        ImageView imageview = new ImageView(image);
+        imageview.setFitHeight(50);imageview.setFitWidth(50);
+        return imageview;
     }
     
 }
