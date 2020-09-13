@@ -8,10 +8,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #485665;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ec.edu.espol.bacongameg4.PrimaryController">
    <bottom>
-      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="20.0" style="-fx-background-color: #dad6d6;" BorderPane.alignment="CENTER">
+      <HBox alignment="CENTER" prefHeight="72.0" prefWidth="600.0" spacing="20.0" style="-fx-background-color: #dad6d6;" BorderPane.alignment="CENTER">
          <children>
             <Label text="Actor 1" />
             <TextField fx:id="txtActor1" />
@@ -29,9 +28,9 @@
       </Label>
    </top>
    <left>
-      <VBox fx:id="panelIzq" alignment="TOP_CENTER" prefHeight="283.0" prefWidth="201.0" style="-fx-background-color: #d6ce93;" BorderPane.alignment="CENTER">
+      <VBox alignment="TOP_CENTER" prefHeight="283.0" prefWidth="201.0" style="-fx-background-color: #d6ce93;" BorderPane.alignment="CENTER">
          <children>
-            <VBox prefHeight="93.0" prefWidth="201.0">
+            <VBox fx:id="bfsBox" prefHeight="100.0" prefWidth="201.0">
                <children>
                   <Label text="Bfs">
                      <font>
@@ -40,7 +39,7 @@
                   </Label>
                </children>
             </VBox>
-            <VBox prefHeight="92.0" prefWidth="201.0" style="-fx-background-color: #efebce;">
+            <VBox fx:id="dijkstraBox" prefHeight="100.0" prefWidth="201.0" style="-fx-background-color: #efebce;">
                <children>
                   <Label text="Dijkstra">
                      <font>
@@ -49,7 +48,7 @@
                   </Label>
                </children>
             </VBox>
-            <VBox prefHeight="93.0" prefWidth="201.0">
+            <VBox fx:id="dfsBox" prefHeight="93.0" prefWidth="201.0">
                <children>
                   <Label text="Dfs">
                      <font>
@@ -62,6 +61,6 @@
       </VBox>
    </left>
    <center>
-      <VBox fx:id="panelCen" alignment="TOP_CENTER" prefHeight="283.0" prefWidth="245.0" style="-fx-background-color: #efebce;" BorderPane.alignment="CENTER" />
+      <VBox fx:id="rightBox" alignment="TOP_CENTER" prefHeight="283.0" prefWidth="245.0" style="-fx-background-color: #b3cdd1;" BorderPane.alignment="CENTER" />
    </center>
 </BorderPane>
