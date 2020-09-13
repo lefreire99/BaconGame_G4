@@ -139,17 +139,21 @@ public class GraphMAP<E>{
         return distancia;
     }
 
-    public Deque<E> caminoMinimo(E inicio, E fin){
+    public Deque<Edge<E>> caminoMinimo(E inicio, E fin){
         if(inicio== null || fin==null) return null;
         if(inicio.equals(fin)) return null;
         //List<E> camino = new LinkedList<>();
         //dijkstra(inicio);
         Vertex<E> v = vertexes.get(fin);
-        Deque<E> pila = new LinkedList<>();
-        pila.push(v.getData());
+        Deque<Edge<E>> pila = new LinkedList<>();
+        //pila.push(v.getData());
         while(v.getAntecesor()!=null){
+            for(Edge e: v.getEdges()){
+                if(e.getVDestino().equals(v.getAntecesor()))
+                    pila.push(e);
+            }
             v = v.getAntecesor();
-            pila.push(v.getData());
+            //pila.push(v.getData());
         }
         /*Deque<Vertex<E>> cola=new LinkedList<>();
         cola.offer(v);
@@ -163,6 +167,7 @@ public class GraphMAP<E>{
         cleanVertexes();
         return pila;
     }
+    
     
     private void cleanVertexes(){
         for(Vertex<E> v:vertexes.values()){

@@ -25,7 +25,7 @@ public class Vertex <E>{
         edges = new ConcurrentLinkedQueue<>();
         distancia=Integer.MAX_VALUE;
     }
-
+    
     public Vertex<E> getAntecesor() {
         return antecesor;
     }
@@ -61,8 +61,6 @@ public class Vertex <E>{
     public ConcurrentLinkedQueue<Edge<E>> getEdges() {
         return edges;
     }
-
-    
 
     @Override
     public int hashCode() {
