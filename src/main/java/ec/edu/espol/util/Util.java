@@ -57,13 +57,13 @@ public class Util {
         }
         return parsed;
     }
-    public static void ponerVertices(GraphMAP<String> grafo, LinkedList<String> datos){
+    private static void ponerVertices(GraphMAP<String> grafo, LinkedList<String> datos){
         for(String s: datos){
             grafo.addVertex(s);
         }
     }
     
-    public static void ponerEdges(GraphMAP<String> grafo, LinkedList<String> datos,String pelicula){
+    private static void ponerEdges(GraphMAP<String> grafo, LinkedList<String> datos,String pelicula){
         for(String origen: datos){
             for(String destino: datos){
                 grafo.addEdge(origen, destino,pelicula, 1);

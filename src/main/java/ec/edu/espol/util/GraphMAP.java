@@ -90,80 +90,55 @@ public class GraphMAP<E>{
         return vertexes.get(data);
     }
     
-    public List<E> bfs(E data){
-        List<E> result=new LinkedList<>();
-        if(data==null) return result;
-        Vertex<E> v=vertexes.get(data);
-        if(v==null)return result;
-        Queue<Vertex<E>> cola=new LinkedList<>();
-        v.setVisited(true);
-        cola.offer(v);
-        while(!cola.isEmpty()){
-            v=cola.poll();
-            result.add(v.getData());
-            for(Edge<E> e:v.getEdges()){
-                if(!e.getVDestino().isVisited()){
-                    e.getVDestino().setVisited(true);
-                    cola.offer(e.getVDestino());
-                }    
+    public void bfs(E data){
+        //List<E> result=new LinkedList<>();
+        if(data!=null){
+            Vertex<E> v=vertexes.get(data);
+            if(v!=null){
+                Queue<Vertex<E>> cola=new LinkedList<>();
+                v.setVisited(true);
+                cola.offer(v);
+                while(!cola.isEmpty()){
+                    v=cola.poll();
+                    //result.add(v.getData());
+                    for(Edge<E> e:v.getEdges()){
+                        if(!e.getVDestino().isVisited()){
+                            e.getVDestino().setVisited(true);
+                            e.getVDestino().setAntecesor(v);
+                            cola.offer(e.getVDestino());
+                        }    
+                    }
+                }
             }
+        //cleanVertexes();
+        //return result;
         }
-        cleanVertexes();
-        return result;
     }
     
-    public List<E> dfs(E data){
-        List<E> result=new LinkedList<>();
-        if(data==null) return result;
-        Vertex<E> v=vertexes.get(data);
-        if(v==null)return result;
-        Deque<Vertex<E>> pila=new LinkedList<>();
-        v.setVisited(true);
-        pila.push(v);
-        while(!pila.isEmpty()){
-            v=pila.pop();
-            result.add(v.getData());
-            for(Edge<E> e:v.getEdges()){
-                if(!e.getVDestino().isVisited()){
-                    e.getVDestino().setVisited(true);
-                    pila.push(e.getVDestino());
-                }    
+    public void dfs(E data){
+        //List<E> result=new LinkedList<>();
+        if(data!=null){
+            Vertex<E> v=vertexes.get(data);
+            if(v!=null){
+                Deque<Vertex<E>> pila=new LinkedList<>();
+                v.setVisited(true);
+                pila.push(v);
+                while(!pila.isEmpty()){
+                    v=pila.pop();
+                    //result.add(v.getData());
+                    for(Edge<E> e:v.getEdges()){
+                        if(!e.getVDestino().isVisited()){
+                            e.getVDestino().setVisited(true);
+                            e.getVDestino().setAntecesor(v);
+                            pila.push(e.getVDestino());
+                        }    
+                    }
+                }
             }
+            //cleanVertexes();
+            //return result;
         }
-        cleanVertexes();
-        return result;
     }
-    
-    /*private void cleanVertexes(){
-        for(Vertex<E> v:vertexes){
-            v.setVisited(false);
-            
-        }
-    }*/
-    
-    /*public int inDegree(E data){
-        if(data==null)return 0;
-        ListIterator<Vertex<E>> iv = vertexes.listIterator();
-        int cont=0;
-        while(iv.hasNext()){
-            Vertex<E> v = iv.next();
-            ListIterator<Edge<E>> ie = v.getEdges().listIterator();
-            while(ie.hasNext()){
-                Edge<E> e = ie.next();
-                if(e.getVDestino().getData().equals(data))
-                    cont++;
-            }
-        }
-        return cont;
-    }
-    
-    public int outDegree(E data){
-        if (data==null) return 0;
-        Vertex v=searchVertex(data);
-        if (v!=null){
-            return v.getEdges().size();
-        }else return 0;
-    }*/
 
     @Override
     public String toString() {
@@ -179,187 +154,6 @@ public class GraphMAP<E>{
         return vertexes+"\n"+sbe.toString();
     }
     
-    /*public boolean isConnected(){
-        if(!directed)
-            return isConnectedNoDirected();
-        return isConnectedDirected();
-        
-    }
-    
-    private boolean isConnectedNoDirected(){
-        Set<E> result=new HashSet<>();
-        result.addAll(bfs(vertexes.getFirst().getData()));
-        Set<E> original=new HashSet<>();
-        for(Vertex<E> v:vertexes){
-            original.add(v.getData());
-        }
-        original.removeAll(result);
-        return original.isEmpty();
-    }
-    
-    private boolean isConnectedDirected(){
-        Set<E> original=new HashSet<>();
-        for(Vertex<E> v:vertexes){
-            original.add(v.getData());
-        }
-        GraphLA<E> reverso= reverse();
-        E data=reverso.vertexes.getFirst().getData();
-        Set<E> result=new HashSet<>();
-        result.addAll(reverso.bfs(data));
-        original.removeAll(result);
-        return original.isEmpty();
-    }
-    
-    public GraphLA<E> reverse(){
-        if(!directed)
-            return this;
-        GraphLA<E> reverso=new GraphLA<>(true);
-        for(Vertex<E> v:vertexes){
-            reverso.addVertex(v.getData());
-        }
-        for(Vertex<E> v:vertexes){
-            for(Edge<E> e:v.getEdges()){
-                reverso.addEdge(e.getVDestino().getData(), e.getVOrigen().getData(), e.getPeso());
-            }
-        }
-        return reverso;
-    }
-    
-    public List<Set<E>> connectedComponents(){
-        List<Set<E>> components=new LinkedList<>();
-        if(isConnected()){
-            Set<E> set=new HashSet<>();
-            for(Vertex<E> v:vertexes){
-                set.add(v.getData());
-            }
-            components.add(set);
-        }else{
-            if(!directed){
-                connectedComponentsNotDirected(components);
-            }else{
-                connectedComponentsDirected(components);
-            }
-        }
-        return components;
-        
-    }
-    
-    private void connectedComponentsNotDirected(List<Set<E>> c){
-        ArrayList<Vertex<E>>av=new ArrayList<>();
-        while(true){
-            Vertex<E> v=vertexNotVisited(av);
-            av.add(v);
-            if(v!=null){
-                Set<E> set=new HashSet<>();
-                set.addAll(bfs(v.getData()));
-                c.add(set);
-            }else break;
-        }
-        cleanVertexes();
-    }
-    
-    private void connectedComponentsDirected(List<Set<E>> c){
-        GraphLA<E> reverso=reverse();
-        ArrayList<Vertex<E>>av=new ArrayList<>();
-        while(true){
-            Vertex<E> v=vertexNotVisited(av);
-            av.add(v);
-            if(v!=null){
-                Vertex<E> vr=reverso.searchVertex(v.getData());
-                Set<E> setreverse=new HashSet<>();
-                setreverse.addAll(reverso.bfs(vr.getData()));
-                Set<E> setoriginal=new HashSet<>();
-                setoriginal.addAll(bfs(v.getData()));
-                if(setoriginal.containsAll(setreverse) && setreverse.containsAll(setoriginal)){
-                    c.add(setreverse);
-                }
-            }else break;
-        }
-        cleanVertexes();
-        reverso.cleanVertexes();
-    }
-    
-    private Vertex<E> vertexNotVisited(ArrayList<Vertex<E>> av){
-        for(Vertex<E> v:vertexes){
-            if(!v.isVisited() && !av.contains(v))
-                return v;
-        }
-        return null;
-    }
-    
-    public GraphLA<E> unirGrafos(GraphLA<E> g1){
-        if(g1.directed || this.directed) return null;
-        GraphLA<E> resultante=new GraphLA<>(false);
-        PriorityQueue<Edge<E>> edgepq= new PriorityQueue<>((Edge<E> e1,Edge<E> e2)-> e1.getPeso()-e2.getPeso());
-        for(Vertex<E> v: vertexes){
-            for(Edge<E> e:v.getEdges()){
-                edgepq.offer(e);
-            }
-        }
-        for(Vertex<E> v: g1.vertexes){
-            for(Edge<E> e:v.getEdges()){
-                edgepq.offer(e);
-            }
-        }
-        while(!edgepq.isEmpty()){
-            Edge<E> e=edgepq.poll();
-            E origen=e.getVOrigen().getData();
-            E destino=e.getVDestino().getData();
-            int peso=e.getPeso();
-            resultante.addVertex(origen);
-            resultante.addVertex(destino);
-            resultante.addEdge(origen, destino, peso);
-        }
-        return resultante;
-    }
-    
-    public GraphLA prim(){
-        if(!this.isConnected() || directed) return null;   
-        GraphLA<E> grafoprim=new GraphLA<>(false);
-        Vertex<E> v=vertexes.getFirst();
-        PriorityQueue<Edge<E>> cola=new PriorityQueue<>((Edge<E> e1,Edge<E> e2)->e1.getPeso()-e2.getPeso());
-        cola.addAll(v.getEdges());
-        grafoprim.addVertex(v.getData());
-        v.setVisited(true);
-        while(!cola.isEmpty()){
-            Edge<E> e=cola.poll();
-            grafoprim.addVertex(e.getVDestino().getData());
-            if(!e.getVDestino().isVisited()){
-                grafoprim.addEdge(e.getVOrigen().getData(),e.getVDestino().getData(),e.getPeso());
-            }
-            e.getVDestino().setVisited(true);
-            for(Edge<E> evd:e.getVDestino().getEdges()){
-                if(!evd.getVDestino().isVisited()){
-                    cola.offer(evd);
-                }
-            }
-        }
-        cleanVertexes();
-        return grafoprim;
-    }
-    
-    public GraphLA kruskal(){
-        if(directed||!this.isConnected()) return null;
-        GraphLA<E> grafokruskal=new GraphLA<>(false);
-        PriorityQueue<Edge<E>> cola=new PriorityQueue<>((Edge<E> e1,Edge<E> e2)->e1.getPeso()-e2.getPeso());
-        for(Vertex<E> v:vertexes){
-            grafokruskal.addVertex(v.getData());
-            for(Edge<E> e:v.getEdges()){
-                cola.offer(e);
-            }
-        }
-        while(!grafokruskal.isConnected()){
-            Edge<E> e=cola.poll();
-            List<Set<E>> componentes=grafokruskal.connectedComponents();
-            for(Set<E> s:componentes){
-                if(s.contains(e.getVOrigen().getData()) && !s.contains(e.getVDestino().getData())){
-                    grafokruskal.addEdge(e.getVOrigen().getData(),e.getVDestino().getData(),e.getPeso());
-                }
-            }
-        }
-        return grafokruskal;
-    }*/
-    
     private void dijkstra(E inicio){
         Vertex<E> v=vertexes.get(inicio);
         PriorityQueue<Vertex<E>> cola=new PriorityQueue<>((Vertex<E> v1,Vertex<E> v2)->v1.getDistancia()-v2.getDistancia());
@@ -370,10 +164,11 @@ public class GraphMAP<E>{
             v.setVisited(true);
             for(Edge<E> e:v.getEdges()){
                 if(!e.getVDestino().isVisited()){
-                    if(v.getDistancia()+e.getPeso()<e.getVDestino().getDistancia())
+                    if(v.getDistancia()+e.getPeso()<e.getVDestino().getDistancia()){
                     e.getVDestino().setDistancia(e.getPeso()+v.getDistancia());
                     e.getVDestino().setAntecesor(v);
                     cola.offer(e.getVDestino());
+                    }
                 }
             }
         }    
