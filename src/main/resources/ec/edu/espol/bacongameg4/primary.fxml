@@ -21,7 +21,7 @@
       </HBox>
    </bottom>
    <top>
-      <Label alignment="CENTER" prefHeight="32.0" prefWidth="201.0" text="Oracle of Bacon" textFill="#fffbfb" BorderPane.alignment="CENTER">
+      <Label fx:id="title" alignment="CENTER" prefHeight="32.0" prefWidth="201.0" text="Oracle of Bacon" textFill="#fffbfb" BorderPane.alignment="CENTER">
          <font>
             <Font name="System Bold" size="22.0" />
          </font>

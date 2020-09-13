@@ -22,7 +22,7 @@ import java.util.Set;
  * @author eduardo
  */
 public class GraphMAP<E>{
-    private Map<E,Vertex<E>> vertexes;
+    public Map<E,Vertex<E>> vertexes;
     private boolean directed;
     
     public GraphMAP(boolean directed){

@@ -5,12 +5,16 @@
  */
 package ec.edu.espol.util;
 
+import ec.edu.espol.bacongameg4.PrimaryController;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.LinkedList;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import org.json.*;
 
 /**
@@ -18,36 +22,55 @@ import org.json.*;
  * @author lfrei
  */
 public class Util {
-    
-    public static GraphMAP<String> leerArchivo(){
-        GraphMAP<String> grafo = new GraphMAP(false);
+    public static GraphMAP<String> grafo;
+    static int j;
+    static long startTime;
+    static ExecutorService ex = Executors.newSingleThreadExecutor();
+
+    public static void leerArchivo(){
+         grafo = new GraphMAP(false);
         try(FileReader fr = new FileReader(new File("src/archivos/data.txt"));
                 BufferedReader br = new BufferedReader(fr)){
+
+            int  i = 0;
+            startTime = System.nanoTime();
             String line;
-            int i = 0;
             while((line=br.readLine())!=null){
-                //Hay registros con : en el titulo, revisar
-                JSONObject obj = new JSONObject(line);
-                String pelicula = obj.getString("title");
-                JSONArray actores = obj.getJSONArray("cast");
-                LinkedList<String> parsedActores = parseJSONArray(actores);
-                if(!actores.isEmpty()){
-                    ponerVertices(grafo,parsedActores);
-                    ponerEdges(grafo,parsedActores,pelicula);
-                    
-                }
-                i++;
-                if (i%1000 == 0){
-                    System.out.println(i);
+                    parseAndAdd(grafo,line);
+                
+                if (++i%10000 == 0){
+                    long estimatedTime = System.nanoTime() - startTime;
+                    System.out.println(((double) estimatedTime) / 1E9);
                 }
             }
-            return grafo;
+            
         } catch (FileNotFoundException ex) {
             ex.printStackTrace();
         } catch (IOException ex) {
             ex.printStackTrace();
         }
-        return null;
+    }
+    private static void parseAndAdd(GraphMAP<String> graph, String line){
+        ex.submit(() -> {
+            try{
+            JSONObject obj = new JSONObject(line);
+            String pelicula = obj.getString("title");
+            JSONArray actores = obj.getJSONArray("cast");
+            LinkedList<String> parsedActores = parseJSONArray(actores);
+            if(!actores.isEmpty()){
+                ponerVertices(graph,parsedActores);
+                ponerEdges(graph,parsedActores,pelicula);
+            }
+            if (++j%10000 == 0){
+                    long estimatedTime = System.nanoTime() - startTime;
+                    System.out.println(((double) estimatedTime) / 1E9);
+                    System.out.println(grafo.vertexes.size());
+                }
+            }
+            catch (Exception e){
+                e.printStackTrace();
+            }
+        });
     }
     private static LinkedList<String> parseJSONArray(JSONArray actores){
         LinkedList<String> parsed = new LinkedList<>();

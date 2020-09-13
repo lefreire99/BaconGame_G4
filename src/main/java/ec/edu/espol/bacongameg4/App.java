@@ -15,11 +15,15 @@ import java.io.IOException;
 public class App extends Application {
 
     private static Scene scene;
-
+    private static Parent parent;
     @Override
-    public void start(Stage stage) throws IOException {
+    public void start(Stage stage){
         Util.leerArchivo();
-        scene = new Scene(loadFXML("primary"), 640, 480);
+        try {
+            scene = new Scene(loadFXML("primary"), 640, 480);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
         stage.setScene(scene);
         stage.show();
     }
