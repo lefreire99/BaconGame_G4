@@ -21,8 +21,8 @@ import java.util.List;
  */
 public class Util {
     
-    public static GraphLA<String> leerArchivo(){
-        GraphLA<String> grafo = new GraphLA(false);
+    public static GraphMAP<String> leerArchivo(){
+        GraphMAP<String> grafo = new GraphMAP(false);
         try(FileReader fr = new FileReader(new File("src/archivos/data.txt"));
                 BufferedReader br = new BufferedReader(fr)){
             String line;
@@ -35,7 +35,7 @@ public class Util {
                 String[] actores=datos[2].replaceAll("\\[", "").replaceAll("\\]", "").split(",");
                 if(actores.length!=1){
                     ponerVertices(grafo,actores);
-                    ponerEdges(grafo,actores);
+                    ponerEdges(grafo,actores,pelicula);
                 }
                 System.out.println(actores[0]);
             }
@@ -48,17 +48,17 @@ public class Util {
         return null;
     }
     
-    public static void ponerVertices(GraphLA<String> grafo, String[] datos){
+    public static void ponerVertices(GraphMAP<String> grafo, String[] datos){
         for(String s: datos){
             grafo.addVertex(s);
         }
     }
     
-    public static void ponerEdges(GraphLA<String> grafo, String[] datos){
+    public static void ponerEdges(GraphMAP<String> grafo, String[] datos,String pelicula){
         int salteador = 1;
         for(int j = 0; j<datos.length-1; j++){
             for(int i = salteador; i<datos.length; i++){
-                grafo.addEdge(datos[j], datos[i], 1);
+                grafo.addEdge(datos[j], datos[i], pelicula, 1);
             }
             salteador++;
         }

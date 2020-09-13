@@ -15,11 +15,27 @@ public class Edge <E>{
     private int peso;
     private Vertex<E> vo;
     private Vertex<E> vd;
+    private String pelicula;
 
     public Edge(int peso, Vertex<E> vo, Vertex<E> vd) {
         this.peso = peso;
         this.vo = vo;
         this.vd = vd;
+    }
+    
+    public Edge(int peso, Vertex<E> vo, Vertex<E> vd,String pelicula) {
+        this.peso = peso;
+        this.vo = vo;
+        this.vd = vd;
+        this.pelicula=pelicula;
+    }
+
+    public String getPelicula() {
+        return pelicula;
+    }
+
+    public void setPelicula(String pelicula) {
+        this.pelicula = pelicula;
     }
 
     public int getPeso() {

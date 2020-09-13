@@ -7,10 +7,12 @@ package ec.edu.espol.util;
 
 import java.util.ArrayList;
 import java.util.Deque;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Set;
@@ -19,21 +21,26 @@ import java.util.Set;
  *
  * @author eduardo
  */
-public class GraphLA <E>{
-    private LinkedList<Vertex<E>> vertexes;
+public class GraphMAP<E>{
+    private Map<E,Vertex<E>> vertexes;
     private boolean directed;
     
-    public GraphLA(boolean directed){
+    public GraphMAP(boolean directed){
         this.directed = directed;
-        vertexes = new LinkedList<>();
+        vertexes = new HashMap<>();
     }
     
     public boolean addVertex(E data){
         Vertex<E> v = new Vertex<>(data);
-        return (data == null || vertexes.contains(v))?false:vertexes.add(v);
+        if(data==null || vertexes.containsKey(data)){
+            return false;
+        }else{
+            vertexes.put(data, v);
+            return true;
+        }
     }
     
-    public boolean removeVertex(E data){
+    /*public boolean removeVertex(E data){
         if(data == null || vertexes.isEmpty()) return false;
         ListIterator<Vertex<E>> iv = vertexes.listIterator();
         while(iv.hasNext()){
@@ -47,25 +54,25 @@ public class GraphLA <E>{
         }
         Vertex<E> vi = new Vertex<>(data);
         return vertexes.remove(vi);
-    }
+    }*/
     
-    public boolean addEdge(E src, E dst, int peso){
+    public boolean addEdge(E src, E dst, String pelicula,int peso){
         if(src == null || dst == null) return false;
-        Vertex<E> vs = searchVertex(src);
-        Vertex<E> vd = searchVertex(dst);
+        Vertex<E> vs = vertexes.get(src);
+        Vertex<E> vd = vertexes.get(dst);
         if(vs == null || vd == null) return false;
-        Edge<E> e = new Edge<>(peso,vs,vd);
+        Edge<E> e = new Edge<>(peso,vs,vd,pelicula);
         if(!vs.getEdges().contains(e))
             vs.getEdges().add(e);
         if(!directed){
-            Edge<E> ei = new Edge<>(peso,vd,vs);
+            Edge<E> ei = new Edge<>(peso,vd,vs,pelicula);
             if(!vd.getEdges().contains(ei))
                 vd.getEdges().add(ei);
         }
         return true;
     }
     
-    public boolean removeEdge(E src, E dst){
+    /*public boolean removeEdge(E src, E dst){
         if(src == null || dst == null) return false;
         Vertex<E> vs = searchVertex(src);
         Vertex<E> vd = searchVertex(dst);
@@ -77,21 +84,16 @@ public class GraphLA <E>{
             vd.getEdges().remove(e);
         }
         return true;
-    }
+    }*/
     
     private Vertex<E> searchVertex(E data){
-        for(Vertex<E> v : vertexes)
-        {
-            if(v.getData().equals(data))
-                return v;
-        }
-        return null;
+        return vertexes.get(data);
     }
     
     public List<E> bfs(E data){
         List<E> result=new LinkedList<>();
         if(data==null) return result;
-        Vertex<E> v=searchVertex(data);
+        Vertex<E> v=vertexes.get(data);
         if(v==null)return result;
         Queue<Vertex<E>> cola=new LinkedList<>();
         v.setVisited(true);
@@ -113,7 +115,7 @@ public class GraphLA <E>{
     public List<E> dfs(E data){
         List<E> result=new LinkedList<>();
         if(data==null) return result;
-        Vertex<E> v=searchVertex(data);
+        Vertex<E> v=vertexes.get(data);
         if(v==null)return result;
         Deque<Vertex<E>> pila=new LinkedList<>();
         v.setVisited(true);
@@ -139,7 +141,7 @@ public class GraphLA <E>{
         }
     }*/
     
-    public int inDegree(E data){
+    /*public int inDegree(E data){
         if(data==null)return 0;
         ListIterator<Vertex<E>> iv = vertexes.listIterator();
         int cont=0;
@@ -161,14 +163,14 @@ public class GraphLA <E>{
         if (v!=null){
             return v.getEdges().size();
         }else return 0;
-    }
+    }*/
 
     @Override
     public String toString() {
         if(vertexes.isEmpty())return "[]\n[]";
         StringBuilder sbe=new StringBuilder();
         sbe.append("[");
-        for(Vertex<E> v:vertexes){
+        for(Vertex<E> v:vertexes.values()){
             for(Edge<E> e:v.getEdges()){
                 sbe.append("(").append(e.getVOrigen().getData()).append(",").append(e.getVDestino().getData()).append(",").append(e.getPeso()).append(")");
             }
@@ -177,7 +179,7 @@ public class GraphLA <E>{
         return vertexes+"\n"+sbe.toString();
     }
     
-    public boolean isConnected(){
+    /*public boolean isConnected(){
         if(!directed)
             return isConnectedNoDirected();
         return isConnectedDirected();
@@ -356,10 +358,10 @@ public class GraphLA <E>{
             }
         }
         return grafokruskal;
-    }
+    }*/
     
     private void dijkstra(E inicio){
-        Vertex<E> v=searchVertex(inicio);
+        Vertex<E> v=vertexes.get(inicio);
         PriorityQueue<Vertex<E>> cola=new PriorityQueue<>((Vertex<E> v1,Vertex<E> v2)->v1.getDistancia()-v2.getDistancia());
         v.setDistancia(0);
         cola.offer(v);
@@ -381,7 +383,7 @@ public class GraphLA <E>{
         if(inicio== null || fin==null) return -1;
         if(inicio.equals(fin)) return 0;
         dijkstra(inicio);
-        int distancia=searchVertex(fin).getDistancia();
+        int distancia=vertexes.get(fin).getDistancia();
         cleanVertexes();
         return distancia;
     }
@@ -391,7 +393,7 @@ public class GraphLA <E>{
         if(inicio.equals(fin)) return null;
         List<E> camino=new LinkedList<>();
         dijkstra(inicio);
-        Vertex<E> v=searchVertex(fin);
+        Vertex<E> v=vertexes.get(fin);
         Deque<Vertex<E>> cola=new LinkedList<>();
         cola.offer(v);
         while(!cola.isEmpty()){
@@ -406,7 +408,7 @@ public class GraphLA <E>{
     }
     
     private void cleanVertexes(){
-        for(Vertex<E> v:vertexes){
+        for(Vertex<E> v:vertexes.values()){
             v.setVisited(false);
             v.setDistancia(Integer.MAX_VALUE);
             v.setAntecesor(null);
