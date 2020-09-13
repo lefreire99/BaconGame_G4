@@ -30,7 +30,7 @@ public class Util {
                 JSONObject obj = new JSONObject(line);
                 String pelicula = obj.getString("title");
                 JSONArray actores = obj.getJSONArray("cast");
-                LinkedList parsedActores = parseJSONArray(actores);
+                LinkedList<String> parsedActores = parseJSONArray(actores);
                 if(!actores.isEmpty()){
                     ponerVertices(grafo,parsedActores);
                     ponerEdges(grafo,parsedActores,pelicula);
@@ -56,17 +56,16 @@ public class Util {
         }
         return parsed;
     }
-    public static void ponerVertices(GraphMAP<String> grafo, LinkedList datos){
-        for(Object s: datos){
-            String se = (String) s;
-            grafo.addVertex((String) se.replaceAll("[\\.*$|\\[\\]]", ""));
+    public static void ponerVertices(GraphMAP<String> grafo, LinkedList<String> datos){
+        for(String s: datos){
+            grafo.addVertex(s);
         }
     }
     
-    public static void ponerEdges(GraphMAP<String> grafo, LinkedList datos,String pelicula){
-        for(Object origen: datos){
-            for(Object destino: datos){
-                grafo.addEdge((String) origen, (String) destino,pelicula, 1);
+    public static void ponerEdges(GraphMAP<String> grafo, LinkedList<String> datos,String pelicula){
+        for(String origen: datos){
+            for(String destino: datos){
+                grafo.addEdge(origen, destino,pelicula, 1);
             }
         }
     }
