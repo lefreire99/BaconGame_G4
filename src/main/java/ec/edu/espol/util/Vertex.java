@@ -5,7 +5,6 @@
  */
 package ec.edu.espol.util;
 
-import java.util.LinkedList;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentLinkedQueue;
 

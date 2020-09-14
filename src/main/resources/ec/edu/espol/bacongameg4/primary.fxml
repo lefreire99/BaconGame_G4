@@ -68,7 +68,7 @@
             <Insets />
          </BorderPane.margin>
          <padding>
-            <Insets top="10.0" />
+            <Insets bottom="15.0" top="15.0" />
          </padding>
       </ScrollPane>
    </center>

@@ -6,9 +6,7 @@
 package ec.edu.espol.util;
 
 import java.util.Deque;
-import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Queue;
@@ -139,14 +137,12 @@ public class GraphMAP<E>{
         if(inicio.equals(fin)) return null;
         Vertex<E> v = vertexes.get(fin);
         Deque<Edge<E>> pila = new LinkedList<>();
-        //pila.push(v.getData());
         while(v.getAntecesor()!=null){
             for(Edge e: v.getEdges()){
                 if(e.getVDestino().equals(v.getAntecesor()))
                     pila.push(e);
             }
             v = v.getAntecesor();
-            //pila.push(v.getData());
         }
         cleanVertexes();
         return pila;
