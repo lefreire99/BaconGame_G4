@@ -12,8 +12,12 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
+import javafx.scene.layout.BorderPane;
 
-public class PrimaryController {
+public class PrimaryController implements Initializable {
+    
+    @FXML
+    private BorderPane bp;
     
     @FXML
     private VBox rightBox;
@@ -23,7 +27,6 @@ public class PrimaryController {
     
     @FXML
     private VBox dfsBox;
-    
     @FXML
     private VBox dijkstraBox;
     
@@ -32,22 +35,27 @@ public class PrimaryController {
     
     @FXML
     private TextField txtActor2;
+
+    LineChartOOB lcoob;
+    @Override
+    public void initialize(URL arg0, ResourceBundle arg1) {
+        lcoob = new LineChartOOB();
+        bp.setRight(lcoob.getLc());
+        Util.grafo.setLcoob(lcoob);
+        //Util.leerArchivo();
+    }
     
     @FXML
     private void buscar() throws IOException {
         System.out.println(Util.grafo.vertexes.size());
-        if(txtActor1.getText().isEmpty()|| txtActor2.getText().isEmpty()){
+        if(txtActor1.getText()==null || txtActor2.getText()==null){
             DialogMessage.nullAlert();
         }else{
             if(!rightBox.getChildren().isEmpty())
                 rightBox.getChildren().removeAll();
-            if(Util.grafo.hasActor(txtActor1.getText()) && Util.grafo.hasActor(txtActor2.getText())){
-                dijkstra();
-                bfs();
-                //dfs();
-            }else{
-                DialogMessage.errorAlert();
-            }
+            dijkstra();
+            bfs();
+            //dfs();
         }
     }
     

@@ -5,6 +5,7 @@
  */
 package ec.edu.espol.util;
 
+import ec.edu.espol.bacongameg4.LineChartOOB;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -20,7 +21,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class GraphMAP<E>{
     public Map<E,Vertex<E>> vertexes;
-    
+    private LineChartOOB lcoob;
     public GraphMAP(){
         vertexes = new ConcurrentHashMap<>();
     }
@@ -53,6 +54,10 @@ public class GraphMAP<E>{
     private Vertex<E> searchVertex(E data){
         return vertexes.get(data);
     }
+
+    public void setLcoob(LineChartOOB lcoob) {
+        this.lcoob = lcoob;
+    }
     
     public void bfs(E data){
         if(data!=null){
@@ -63,6 +68,7 @@ public class GraphMAP<E>{
                 cola.offer(v);
                 while(!cola.isEmpty()){
                     v=cola.poll();
+                    lcoob.sendBFS(1);
                     for(Edge<E> e:v.getEdges()){
                         if(!e.getVDestino().isVisited()){
                             e.getVDestino().setVisited(true);

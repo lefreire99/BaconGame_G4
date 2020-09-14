@@ -53,7 +53,8 @@ public class Util {
     private static void parseAndAdd(GraphMAP<String> graph, String line){
         ex.submit(() -> {
             try{
-            JSONObject obj = new JSONObject(line);
+        
+                JSONObject obj = new JSONObject(line);
             String pelicula = obj.getString("title");
             JSONArray actores = obj.getJSONArray("cast");
             LinkedList<String> parsedActores = parseJSONArray(actores);
