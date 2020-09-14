@@ -7,7 +7,6 @@ package ec.edu.espol.util;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.LinkedList;
@@ -20,13 +19,14 @@ import org.json.*;
  * @author lfrei
  */
 public class Util {
-    public static GraphMAP<String> grafo;
     static int j;
     static long startTime;
     static ExecutorService ex = Executors.newSingleThreadExecutor();
 
-    public static void leerArchivo(){
-         grafo = new GraphMAP();
+    private Util() {
+    }
+    
+    public static void leerArchivo(GraphMAP<String> grafo){
         try(FileReader fr = new FileReader(new File("src/archivos/data.txt"));
                 BufferedReader br = new BufferedReader(fr)){
 
@@ -42,10 +42,8 @@ public class Util {
                 }
             }
             
-        } catch (FileNotFoundException ex) {
-            ex.printStackTrace();
-        } catch (IOException ex) {
-            ex.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
     private static void parseAndAdd(GraphMAP<String> graph, String line){
@@ -62,7 +60,7 @@ public class Util {
             if (++j%10000 == 0){
                     long estimatedTime = System.nanoTime() - startTime;
                     System.out.println(((double) estimatedTime) / 1E9);
-                    System.out.println(grafo.vertexes.size());
+                    System.out.println(graph.getVertexes().size());
                 }
             }
             catch (Exception e){

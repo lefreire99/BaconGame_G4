@@ -1,10 +1,10 @@
 package ec.edu.espol.bacongameg4;
 
+import ec.edu.espol.util.Data;
 import ec.edu.espol.util.Edge;
 import ec.edu.espol.util.DialogMessage;
 import ec.edu.espol.util.StackActor;
 import ec.edu.espol.util.StackMovie;
-import ec.edu.espol.util.Util;
 import java.io.IOException;
 import java.util.Deque;
 import javafx.fxml.FXML;
@@ -37,13 +37,13 @@ public class PrimaryController {
     
     @FXML
     private void buscar() throws IOException {
-        System.out.println(Util.grafo.vertexes.size());
+        System.out.println(Data.getInstance().getGrafo().getVertexes().size());
         if(txtActor1.getText().isEmpty()|| txtActor2.getText().isEmpty()){
             DialogMessage.nullAlert();
         }else{
             if(scrollPane.getContent()!=null)
                 scrollPane.setContent(null);
-            if(Util.grafo.hasActor(txtActor1.getText()) && Util.grafo.hasActor(txtActor2.getText())){
+            if(Data.getInstance().getGrafo().hasActor(txtActor1.getText()) && Data.getInstance().getGrafo().hasActor(txtActor2.getText())){
                 dijkstra();
                 bfs();
                 dfs();
@@ -58,13 +58,13 @@ public class PrimaryController {
                 dijkstraBox.getChildren().remove(1,dijkstraBox.getChildren().size());
         }
         Long timeStart1=System.currentTimeMillis();
-        Util.grafo.dijkstra(txtActor1.getText());
-        Deque<Edge<String>> rutaDijkstra = Util.grafo.caminoMinimo(txtActor1.getText(), txtActor2.getText());
+        Data.getInstance().getGrafo().dijkstra(txtActor1.getText());
+        Deque<Edge<String>> rutaDijkstra = Data.getInstance().getGrafo().caminoMinimo(txtActor1.getText(), txtActor2.getText());
         Label numActores1=new Label("Cantidad: "+rutaDijkstra.size());
         VBox diagrama = createVBox(rutaDijkstra);
-        dijkstraBox.setOnMouseClicked((ev)->{
-            refreshScrollPane(diagrama);
-        });
+        dijkstraBox.setOnMouseClicked(ev->
+            refreshScrollPane(diagrama)
+        );
         Long timeEnd1=System.currentTimeMillis();
         Long timeFinal1=timeEnd1-timeStart1;
         Label time1=new Label("Tiempo: "+timeFinal1);
@@ -76,13 +76,13 @@ public class PrimaryController {
                 bfsBox.getChildren().remove(1,bfsBox.getChildren().size());
         }
         Long timeStart2=System.currentTimeMillis();
-        Util.grafo.bfs(txtActor1.getText());
-        Deque<Edge<String>> rutaBfs = Util.grafo.caminoMinimo(txtActor1.getText(), txtActor2.getText());
+        Data.getInstance().getGrafo().bfs(txtActor1.getText());
+        Deque<Edge<String>> rutaBfs = Data.getInstance().getGrafo().caminoMinimo(txtActor1.getText(), txtActor2.getText());
         Label numActores2=new Label("Cantidad: "+rutaBfs.size());
         VBox diagrama = createVBox(rutaBfs);
-        bfsBox.setOnMouseClicked((ev)->{
-            refreshScrollPane(diagrama);
-        });
+        bfsBox.setOnMouseClicked(ev->
+            refreshScrollPane(diagrama)
+        );
         Long timeEnd2=System.currentTimeMillis();
         Long timeFinal2=timeEnd2-timeStart2;
         Label time2=new Label("Tiempo: "+timeFinal2);
@@ -94,13 +94,13 @@ public class PrimaryController {
                 dfsBox.getChildren().remove(1,dfsBox.getChildren().size());
         }
         Long timeStart3=System.currentTimeMillis();
-        Util.grafo.dfs(txtActor1.getText());
-        Deque<Edge<String>> rutaDfs = Util.grafo.caminoMinimo(txtActor1.getText(), txtActor2.getText());
+        Data.getInstance().getGrafo().dfs(txtActor1.getText());
+        Deque<Edge<String>> rutaDfs = Data.getInstance().getGrafo().caminoMinimo(txtActor1.getText(), txtActor2.getText());
         Label numActores3=new Label("Cantidad: "+rutaDfs.size());
         VBox diagrama = createVBox(rutaDfs);
-        dfsBox.setOnMouseClicked((ev)->{
-            refreshScrollPane(diagrama);
-        });
+        dfsBox.setOnMouseClicked(ev->
+            refreshScrollPane(diagrama)
+        );
         Long timeEnd3=System.currentTimeMillis();
         Long timeFinal3=timeEnd3-timeStart3;
         Label time3=new Label("Tiempo: "+timeFinal3);
@@ -130,8 +130,7 @@ public class PrimaryController {
     }
     
     private Line mostrarLinea(){
-        Line linea = new Line(50,0,50,30);
-        return linea;
+        return new Line(50,0,50,30);
     }
     
 }

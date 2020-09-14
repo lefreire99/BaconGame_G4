@@ -1,5 +1,6 @@
 package ec.edu.espol.bacongameg4;
 
+import ec.edu.espol.util.Data;
 import ec.edu.espol.util.Util;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -18,7 +19,7 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage){
-        Util.leerArchivo();
+        Util.leerArchivo(Data.getInstance().getGrafo());
         try {
             scene = new Scene(loadFXML("primary"), 640, 480);
         } catch (IOException ex) {
