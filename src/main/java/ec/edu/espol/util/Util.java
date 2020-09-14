@@ -5,16 +5,13 @@
  */
 package ec.edu.espol.util;
 
-import ec.edu.espol.bacongameg4.PrimaryController;
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 import org.json.*;
 
 /**
@@ -22,14 +19,15 @@ import org.json.*;
  * @author lfrei
  */
 public class Util {
-    public static GraphMAP<String> grafo;
     static int j;
     static long startTime;
     static ExecutorService ex = Executors.newSingleThreadExecutor();
 
-    public static void leerArchivo(){
-         grafo = new GraphMAP();
-        try(FileReader fr = new FileReader(new File("src/archivos/data.txt"));
+    private Util() {
+    }
+    
+    public static void leerArchivo(GraphMAP<String> grafo){
+        try(FileReader fr = new FileReader(new File(Constants.FILEPATH));
                 BufferedReader br = new BufferedReader(fr)){
 
             int  i = 0;
@@ -44,17 +42,14 @@ public class Util {
                 }
             }
             
-        } catch (FileNotFoundException ex) {
-            ex.printStackTrace();
-        } catch (IOException ex) {
-            ex.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
     private static void parseAndAdd(GraphMAP<String> graph, String line){
         ex.submit(() -> {
             try{
-        
-                JSONObject obj = new JSONObject(line);
+            JSONObject obj = new JSONObject(line);
             String pelicula = obj.getString("title");
             JSONArray actores = obj.getJSONArray("cast");
             LinkedList<String> parsedActores = parseJSONArray(actores);
@@ -65,7 +60,7 @@ public class Util {
             if (++j%10000 == 0){
                     long estimatedTime = System.nanoTime() - startTime;
                     System.out.println(((double) estimatedTime) / 1E9);
-                    System.out.println(grafo.vertexes.size());
+                    System.out.println(graph.getVertexes().size());
                 }
             }
             catch (Exception e){

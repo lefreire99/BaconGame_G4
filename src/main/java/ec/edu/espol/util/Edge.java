@@ -63,12 +63,6 @@ public class Edge <E>{
     }
 
     @Override
-    public int hashCode() {
-        int hash = 3;
-        return hash;
-    }
-
-    @Override
     public boolean equals(Object obj) {
         if (this == obj) {
             return true;
@@ -81,6 +75,14 @@ public class Edge <E>{
         }
         final Edge<E> other = (Edge<E>) obj;
         return Objects.equals(this.vo, other.vo) && Objects.equals(this.vd, other.vd);
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 29 * hash + Objects.hashCode(this.vo);
+        hash = 29 * hash + Objects.hashCode(this.vd);
+        return hash;
     }
     
     

@@ -1,27 +1,16 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package ec.edu.espol.util;
 
-import ec.edu.espol.bacongameg4.LineChartOOB;
 import java.util.Deque;
-import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentHashMap;
 
-/**
- *
- * @author eduardo
- */
 public class GraphMAP<E>{
-    public Map<E,Vertex<E>> vertexes;
-    private LineChartOOB lcoob;
+    private Map<E,Vertex<E>> vertexes;
+    
     public GraphMAP(){
         vertexes = new ConcurrentHashMap<>();
     }
@@ -51,14 +40,6 @@ public class GraphMAP<E>{
         return true;
     }
     
-    private Vertex<E> searchVertex(E data){
-        return vertexes.get(data);
-    }
-
-    public void setLcoob(LineChartOOB lcoob) {
-        this.lcoob = lcoob;
-    }
-    
     public void bfs(E data){
         if(data!=null){
             Vertex<E> v = vertexes.get(data);
@@ -68,7 +49,6 @@ public class GraphMAP<E>{
                 cola.offer(v);
                 while(!cola.isEmpty()){
                     v=cola.poll();
-                    lcoob.sendBFS(1);
                     for(Edge<E> e:v.getEdges()){
                         if(!e.getVDestino().isVisited()){
                             e.getVDestino().setVisited(true);
@@ -125,12 +105,10 @@ public class GraphMAP<E>{
             v=cola.poll();
             v.setVisited(true);
             for(Edge<E> e:v.getEdges()){
-                if(!e.getVDestino().isVisited()){
-                    if(v.getDistancia()+e.getPeso()<e.getVDestino().getDistancia()){
-                        e.getVDestino().setDistancia(e.getPeso()+v.getDistancia());
-                        e.getVDestino().setAntecesor(v);
-                        cola.offer(e.getVDestino());
-                    }
+                if(!e.getVDestino().isVisited() && v.getDistancia()+e.getPeso()<e.getVDestino().getDistancia()){
+                    e.getVDestino().setDistancia(e.getPeso()+v.getDistancia());
+                    e.getVDestino().setAntecesor(v);
+                    cola.offer(e.getVDestino()); 
                 }
             }
         }    
@@ -141,18 +119,15 @@ public class GraphMAP<E>{
     }
 
     public Deque<Edge<E>> caminoMinimo(E inicio, E fin){
-        if(inicio== null || fin==null) return null;
-        if(inicio.equals(fin)) return null;
-        Vertex<E> v = vertexes.get(fin);
         Deque<Edge<E>> pila = new LinkedList<>();
-        //pila.push(v.getData());
+        if((inicio== null || fin==null)||inicio.equals(fin)) return pila;
+        Vertex<E> v = vertexes.get(fin);
         while(v.getAntecesor()!=null){
             for(Edge e: v.getEdges()){
                 if(e.getVDestino().equals(v.getAntecesor()))
                     pila.push(e);
             }
             v = v.getAntecesor();
-            //pila.push(v.getData());
         }
         cleanVertexes();
         return pila;
@@ -165,6 +140,10 @@ public class GraphMAP<E>{
             v.setDistancia(Integer.MAX_VALUE);
             v.setAntecesor(null);
         }
+    }
+
+    public Map<E, Vertex<E>> getVertexes() {
+        return vertexes;
     }
     
 }

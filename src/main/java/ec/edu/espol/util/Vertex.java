@@ -1,12 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package ec.edu.espol.util;
 
-import java.util.LinkedList;
 import java.util.Objects;
+import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
@@ -58,14 +53,8 @@ public class Vertex <E>{
         this.data = data;
     }
 
-    public ConcurrentLinkedQueue<Edge<E>> getEdges() {
+    public Queue<Edge<E>> getEdges() {
         return edges;
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 7;
-        return hash;
     }
 
     @Override
@@ -81,6 +70,11 @@ public class Vertex <E>{
         }
         final Vertex<E> other = (Vertex<E>) obj;
         return Objects.equals(this.data, other.data);   
+    }
+
+    @Override
+    public int hashCode() {
+        return 59 * 3 + Objects.hashCode(this.data);
     }
 
     @Override
