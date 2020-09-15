@@ -31,6 +31,7 @@ public class Util {
                 BufferedReader br = new BufferedReader(fr)){
 
             int  i = 0;
+            System.out.println("Leyendo archivo");
             startTime = System.nanoTime();
             String line;
             while((line=br.readLine())!=null){
@@ -38,9 +39,11 @@ public class Util {
                 
                 if (++i%10000 == 0){
                     long estimatedTime = System.nanoTime() - startTime;
-                    System.out.println(((double) estimatedTime) / 1E9);
+                    System.out.println("Leyendo: "+(((double) estimatedTime) / 1E9));
                 }
             }
+            System.out.println("Fin del archivo");
+            ex.submit(()->System.out.println("Grafo procesado correctamente"));
             
         } catch (IOException e) {
             e.printStackTrace();
@@ -59,8 +62,8 @@ public class Util {
             }
             if (++j%10000 == 0){
                     long estimatedTime = System.nanoTime() - startTime;
-                    System.out.println(((double) estimatedTime) / 1E9);
-                    System.out.println(graph.getVertexes().size());
+                    System.out.println("Procesando grafo: "+(((double) estimatedTime) / 1E9));
+                    System.out.println("Vertices procesados: "+graph.getVertexes().size());
                 }
             }
             catch (Exception e){
