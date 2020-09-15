@@ -61,13 +61,13 @@ public class PrimaryController {
         Long timeStart1=System.nanoTime();
         Data.getInstance().getGrafo().dijkstra(txtActor1.getText());
         Deque<Edge<String>> rutaDijkstra = Data.getInstance().getGrafo().caminoMinimo(txtActor1.getText(), txtActor2.getText());
+        Double timeFinal1= (double) System.nanoTime() - timeStart1;
+        Label time1=new Label(Constants.TIEMPO+timeFinal1/ 1E9);
         Label numActores1=new Label(Constants.CANTIDAD+rutaDijkstra.size());
         VBox diagrama = createVBox(rutaDijkstra);
         dijkstraBox.setOnMouseClicked(e->
             refreshScrollPane(diagrama)
         );
-        Double timeFinal1= (double) System.nanoTime() - timeStart1;
-        Label time1=new Label(Constants.TIEMPO+timeFinal1/ 1E9);
         dijkstraBox.getChildren().addAll(numActores1,time1);
     }
     
@@ -78,13 +78,13 @@ public class PrimaryController {
         Long timeStart2=System.nanoTime();
         Data.getInstance().getGrafo().bfs(txtActor1.getText());
         Deque<Edge<String>> rutaBfs = Data.getInstance().getGrafo().caminoMinimo(txtActor1.getText(), txtActor2.getText());
+        Double timeFinal2=(double) System.nanoTime() - timeStart2;
+        Label time2=new Label(Constants.TIEMPO+timeFinal2/ 1E9);
         Label numActores2=new Label(Constants.CANTIDAD+rutaBfs.size());
         VBox diagrama = createVBox(rutaBfs);
         bfsBox.setOnMouseClicked(e->
             refreshScrollPane(diagrama)
         );
-        Double timeFinal2=(double) System.nanoTime() - timeStart2;
-        Label time2=new Label(Constants.TIEMPO+timeFinal2/ 1E9);
         bfsBox.getChildren().addAll(numActores2,time2);
     }
     
@@ -95,13 +95,13 @@ public class PrimaryController {
         Long timeStart3=System.nanoTime();
         Data.getInstance().getGrafo().dfs(txtActor1.getText());
         Deque<Edge<String>> rutaDfs = Data.getInstance().getGrafo().caminoMinimo(txtActor1.getText(), txtActor2.getText());
+        Double timeFinal3=(double) System.nanoTime() - timeStart3;
+        Label time3=new Label(Constants.TIEMPO+timeFinal3 / 1E9);
         Label numActores3=new Label(Constants.CANTIDAD+rutaDfs.size());
         VBox diagrama = createVBox(rutaDfs);
         dfsBox.setOnMouseClicked(e->
             refreshScrollPane(diagrama)
         );
-        Double timeFinal3=(double) System.nanoTime() - timeStart3;
-        Label time3=new Label(Constants.TIEMPO+timeFinal3 / 1E9);
         dfsBox.getChildren().addAll(numActores3,time3);
     }
     
